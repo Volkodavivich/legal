@@ -60,6 +60,9 @@
             display: flex;
             background: #f1f5f9;
             border-bottom: 1px solid #e2e8f0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
         
         .tab-button {
@@ -192,9 +195,11 @@
             background: #f8fafc;
         }
         
-        .back-button {
-            display: inline-block;
-            margin-top: 30px;
+        .back-to-top-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
             padding: 12px 28px;
             background: #4f46e5;
             color: white;
@@ -205,12 +210,54 @@
             border: none;
             cursor: pointer;
             font-size: 1rem;
+            margin: 40px auto 0;
+            width: 200px;
         }
         
-        .back-button:hover {
+        .back-to-top-btn:hover {
             background: #4338ca;
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+        }
+        
+        .back-to-top-btn span {
+            font-size: 1.2rem;
+        }
+        
+        .floating-top-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: #4f46e5;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+            border: none;
+            font-size: 1.2rem;
+        }
+        
+        .floating-top-btn.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .floating-top-btn:hover {
+            background: #4338ca;
+            transform: translateY(-3px);
+        }
+        
+        .center {
+            text-align: center;
         }
         
         @media (max-width: 768px) {
@@ -228,6 +275,7 @@
             
             .nav-tabs {
                 flex-direction: column;
+                position: relative;
             }
             
             .tab-button {
@@ -242,6 +290,13 @@
                 height: 100%;
                 width: 3px;
                 right: auto;
+            }
+            
+            .floating-top-btn {
+                bottom: 20px;
+                right: 20px;
+                width: 45px;
+                height: 45px;
             }
         }
         
@@ -351,6 +406,12 @@
                     <p><strong>8.2.</strong> Полный текст лицензии Apache License 2.0 доступен по адресу: <a href="http://www.apache.org/licenses/LICENSE-2.0" target="_blank">http://www.apache.org/licenses/LICENSE-2.0</a>.</p>
                     <p><strong>8.3.</strong> Авторские права на такие сторонние материалы принадлежат их соответствующим правообладателям. Использование осуществляется в соответствии с условиями лицензий.</p>
                 </div>
+                
+                <div class="center">
+                    <button class="back-to-top-btn" onclick="scrollToTop()">
+                        <span>↑</span> Наверх
+                    </button>
+                </div>
             </div>
             
             <div id="privacy" class="tab-content">
@@ -379,29 +440,43 @@
                     </div>
                     
                     <div class="subsection">
-                        <h3>2.2. Данные, которые Приложение НЕ запрашивает и НЕ обрабатывает</h3>
-                        <p>Приложение сознательно ограничивает сбор данных и <strong>НЕ обрабатывает</strong>:</p>
-                        <ul>
-                            <li>Регистрационные данные личности (ФИО, дата рождения).</li>
-                            <li>Контакты (электронная почта, номер телефона) — <em>кроме случая, когда пользователь самостоятельно пишет в поддержку, предоставляя адрес для ответа</em>.</li>
-                            <li>Документы (паспорт, водительские права).</li>
-                            <li>Финансовая информация (данные банковских карт, платёжных систем).</li>
-                            <li><strong>Любые технические данные об устройстве:</strong> Точная геолокация/GPS, IP-адрес, список контактов, информация об устройстве и операционной системе, данные файлов cookie.</li>
-                            <li>Анонимные отчеты об ошибках (crash reports) или статистика использования.</li>
-                            <li>Биометрические данные.</li>
-                        </ul>
-                    </div>
-                    
-                    <div class="subsection">
-                        <h3>2.3. Цели обработки персональных данных</h3>
-                        <p>Обработка данных осуществляется <strong>исключительно</strong> для следующих целей:</p>
-                        <ul>
-                            <li>Предоставление доступа к функционалу Приложения и исполнение лицензионного соглашения с Пользователем.</li>
-                            <li>Идентификация пользователя и защита его аккаунта от несанкционированного доступа.</li>
-                            <li>Бесперебойное сохранение и отображение игрового прогресса (очков, уровней, энергии и т.д.).</li>
-                        </ul>
-                    </div>
-                </div>
+    <h3>2.2. Данные, которые Приложение НЕ запрашивает и НЕ обрабатывает</h3>
+    <p>Приложение сознательно ограничивает сбор данных и <strong>НЕ обрабатывает</strong>:</p>
+    <ul>
+        <li>Регистрационные данные личности (ФИО, дата рождения).</li>
+        <li>Контакты (электронная почта, номер телефона) — <em>кроме случая, когда пользователь самостоятельно пишет в поддержку, предоставляя адрес для ответа</em>.</li>
+        <li>Документы (паспорт, водительские права).</li>
+        <li>Финансовая информация (данные банковских карт, платёжных систем).</li>
+        <li><strong>Любые технические данные об устройстве:</strong> Точная геолокация/GPS, IP-адрес, список контактов, информация об устройстве и операционной системе.</li>
+        <li>Анонимные отчеты об ошибках (crash reports) или статистика использования.</li>
+        <li>Биометрические данные.</li>
+    </ul>
+</div>
+
+<div class="subsection">
+    <h3>2.3. Локальное хранение данных на устройстве</h3>
+    <p>Для обеспечения максимальной скорости работы и плавности интерфейса Приложение использует <strong>локальную базу данных (Room)</strong> на устройстве Пользователя. В ней хранятся:</p>
+    <ul>
+        <li>Кэшированные данные игрового прогресса для мгновенного отображения</li>
+        <li>Локальные настройки интерфейса и предпочтения пользователя</li>
+    </ul>
+    <p><strong>Важные аспекты локального хранения:</strong></p>
+    <ul>
+        <li>Все значимые данные (игровой прогресс, статистика, достижения) постоянно синхронизируются с защищенным сервером и не теряются при очистке кэша устройства.</li>
+        <li>Локальное хранилище не содержит персональных данных в открытом виде.</li>
+        <li>Пользователь может очистить эти данные в любой момент через настройки своего устройства.</li>
+    </ul>
+</div>
+
+<div class="subsection">
+    <h3>2.4. Цели обработки персональных данных</h3>
+    <p>Обработка данных осуществляется <strong>исключительно</strong> для следующих целей:</p>
+    <ul>
+        <li>Предоставление доступа к функционалу Приложения и исполнение лицензионного соглашения с Пользователем.</li>
+        <li>Идентификация пользователя и защита его аккаунта от несанкционированного доступа.</li>
+        <li>Бесперебойное сохранение и отображение игрового прогресса (очков, уровней, энергии и т.д.).</li>
+    </ul>
+</div>
                 
                 <div class="section">
                     <h2>3. Хранение и защита данных</h2>
@@ -464,20 +539,26 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            
-            <div style="text-align: center; margin-top: 40px;">
-                <button class="back-button" onclick="window.history.back()">← Вернуться назад</button>
+                
+                <div class="center">
+                    <button class="back-to-top-btn" onclick="scrollToTop()">
+                        <span>↑</span> Наверх
+                    </button>
+                </div>
             </div>
         </div>
         
         <div class="footer">
             <p>© 2026 Приложение «Время Пришло». Все права защищены.</p>
-            <p>Дата последнего обновления документов: 25 января 2026 года</p>
+            <p>Дата последнего обновления документов: 26 января 2026 года</p>
         </div>
     </div>
     
+    <!-- Плавающая кнопка "Наверх" -->
+    <button class="floating-top-btn" onclick="scrollToTop()" title="Наверх">↑</button>
+    
     <script>
+        // Переключение между вкладками
         function showTab(tabId) {
             // Скрыть все вкладки
             const tabContents = document.querySelectorAll('.tab-content');
@@ -498,8 +579,26 @@
             document.querySelector(`[onclick="showTab('${tabId}')"]`).classList.add('active');
             
             // Прокрутить к началу контента
-            document.querySelector('.content').scrollTop = 0;
+            scrollToTop();
         }
+        
+        // Прокрутка к началу страницы (главная функция)
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth' // Плавная прокрутка
+            });
+        }
+        
+        // Показать/скрыть плавающую кнопку "Наверх" при прокрутке
+        window.addEventListener('scroll', function() {
+            const floatingBtn = document.querySelector('.floating-top-btn');
+            if (window.scrollY > 300) {
+                floatingBtn.classList.add('visible');
+            } else {
+                floatingBtn.classList.remove('visible');
+            }
+        });
         
         // При загрузке страницы показываем первую вкладку
         document.addEventListener('DOMContentLoaded', function() {
